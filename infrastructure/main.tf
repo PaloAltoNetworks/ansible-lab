@@ -66,7 +66,7 @@ module "firewall" {
 
   fw_name             = var.fw_name
   fw_zone             = var.zone
-  fw_image            = "https://www.googleapis.com/compute/v1/projects/paloaltonetworksgcp-public/global/images/vmseries-bundle2-908"
+  fw_image            = "https://www.googleapis.com/compute/v1/projects/paloaltonetworksgcp-public/global/images/vmseries-bundle2-904"
   fw_machine_type     = "n1-standard-4"
   fw_machine_cpu      = "Intel Skylake"
   fw_bootstrap_bucket = module.bootstrap.bootstrap_name
