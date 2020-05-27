@@ -1,0 +1,24 @@
+---
+- hosts: lab_fw
+  connection: local
+
+  vars:
+    device:
+      ip_address: '{{ ip_address }}'
+      username: '{{ username | default(omit) }}'
+      password: '{{ password | default(omit) }}'
+      api_key: '{{ api_key | default(omit) }}'
+
+  vars_files:
+    - creds.yml
+
+  collections:
+    - paloaltonetworks.panos
+
+  tasks:
+    - name: Gather facts for device
+      panos_facts:
+        provider: '{{ device }}'
+
+    - debug:
+        msg: "Model: {{ ansible_facts['net_model'] }}, version: {{ ansible_facts['net_version'] }}"
