@@ -31,7 +31,7 @@ variable "region" {
 variable "zone" {
   description = "The GCP zone in which to deploy"
   type        = string
-  default     = "us-east-1b"
+  default     = "us-east1-b"
 }
 
 variable "allowed_mgmt_cidr" {
