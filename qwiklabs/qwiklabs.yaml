@@ -1,0 +1,10 @@
+imports:
+- path: qwiklabs.jinja
+ 
+
+resources:
+- name: ilb-as-next-hop
+  type: qwiklabs.jinja
+  properties:
+    description: "show ILB as Next Hop"
+    zones: us-central1-a   

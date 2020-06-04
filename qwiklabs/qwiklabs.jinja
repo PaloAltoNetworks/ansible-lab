@@ -1,0 +1,95 @@
+resources:
+{# Delete default firewall rules and network #}
+- name: default-allow-icmp-delete
+  action: gcp-types/compute-v1:compute.firewalls.delete
+  properties:
+    firewall: default-allow-icmp
+    project: {{ env["project"] }}
+  metadata:
+    runtimePolicy:
+    - CREATE
+- name: default-allow-ssh-delete
+  action: gcp-types/compute-v1:compute.firewalls.delete
+  properties:
+    firewall: default-allow-ssh
+    project: {{ env["project"] }}
+  metadata:
+    runtimePolicy:
+    - CREATE
+- name: default-allow-internal-delete
+  action: gcp-types/compute-v1:compute.firewalls.delete
+  properties:
+    firewall: default-allow-internal
+    project: {{ env["project"] }}
+  metadata:
+    runtimePolicy:
+    - CREATE
+- name: default-allow-rdp-delete
+  action: gcp-types/compute-v1:compute.firewalls.delete
+  properties:
+    firewall: default-allow-rdp
+    project: {{ env["project"] }}
+  metadata:
+    runtimePolicy:
+    - CREATE
+- name: default-network-delete
+  action: gcp-types/compute-v1:compute.networks.delete
+  properties:
+    network: default
+    project: {{ env["project"] }}
+  metadata:
+    runtimePolicy:
+    - CREATE
+    dependsOn:
+    - default-allow-icmp-delete
+    - default-allow-internal-delete
+    - default-allow-ssh-delete
+    - default-allow-rdp-delete
+- name: enable-compute-engine-api
+  action: gcp-types/servicemanagement-v1:servicemanagement.services.enable
+  properties:
+    consumerId: "project:{{ env['project'] }}"
+    serviceName: compute.googleapis.com
+
+{# Run the tf script #}
+- name: execute-tf
+  action: gcp-types/cloudbuild-v1:cloudbuild.projects.builds.create
+  metadata:
+    runtimePolicy:
+    - UPDATE_ON_CHANGE
+  properties:
+    steps:
+    - name: gcr.io/cloud-builders/git
+      args:
+      - clone
+      - https://github.com/PaloAltoNetworks/ansible-lab
+    - name: 'ubuntu'
+      args:
+      - bash
+      - -c
+      - cp -r ./ansible-lab/infrastructure/* . && ls
+    - name: 'ubuntu'
+      args:
+      - bash
+      - -c
+      - echo '{{ properties['keyFile'] }}' > sa.key
+    - name: 'ubuntu'
+      args:
+      - bash
+      - -c
+      - echo 'project = "{{ env["project"] }}"' > terraform.tfvars
+    - name: registry.hub.docker.com/hashicorp/terraform:light
+      args:
+      - init
+    - name: registry.hub.docker.com/hashicorp/terraform:light
+      args:
+      - plan
+    - name: registry.hub.docker.com/hashicorp/terraform:light
+      args:
+      - apply
+      - --auto-approve
+    timeout: 360s
+  metadata:
+    dependsOn:
+    - default-network-delete
+    - enable-compute-engine-api
