@@ -29,17 +29,12 @@ provider "google" {
 ############################################################################################
 
 module "bootstrap" {
-  source  = "stealthllama/panos-bootstrap/google"
-  version = "0.9.0"
+  source  = "github.com/PaloAltoNetworks/terraform-google-panos-bootstrap?ref=v0.9.0"
 
   bootstrap_project = var.project
   bootstrap_region  = var.region
 
   hostname = var.fw_name
-  # panorama-server = var.panorama
-  # tplname         = var.tplname
-  # dgname          = var.dgname
-  # vm-auth-key     = var.vm_auth_key
 }
 
 module "vpc" {
