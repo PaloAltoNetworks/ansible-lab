@@ -1,0 +1,34 @@
+---
+name: validate
+on:
+  push:
+  schedule:
+    - cron: "0 0 1 * *"
+
+jobs:
+  tf_validate:
+    name: terraform validate
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v2
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v1
+
+      - name: Run terraform validate in infrastructure directories
+        env:
+          AWS_DEFAULT_REGION: us-east-1
+        run: |
+          for dir in $(find . -type d -not \( -name ".?*" \) -maxdepth 1 -mindepth 1); 
+          do
+            cd ${GITHUB_WORKSPACE}/${dir}
+            if [ -d infrastructure ]
+            then
+              cd infrastructure
+              terraform init
+              terraform validate
+              terraform fmt -check=true
+            fi
+          done
