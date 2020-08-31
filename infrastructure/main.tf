@@ -29,7 +29,8 @@ provider "google" {
 ############################################################################################
 
 module "bootstrap" {
-  source  = "github.com/PaloAltoNetworks/terraform-google-panos-bootstrap?ref=v0.9.0"
+  source  = "PaloAltoNetworks/panos-bootstrap/google"
+  version = "~> 1.0"
 
   bootstrap_project = var.project
   bootstrap_region  = var.region
