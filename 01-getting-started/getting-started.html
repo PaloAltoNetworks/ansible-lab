@@ -1,0 +1,291 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Getting Started &mdash; ansible-lab  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Run the Check Ready playbook" href="../02-check-ready/check-ready.html" />
+    <link rel="prev" title="PAN-OS Ansible Lab Guide" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> ansible-lab
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../02-check-ready/check-ready.html">Run the Check Ready playbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../03-hello-world/hello-world.html">Run the Hello World playbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../04-full-config/full-config.html">Run the Full Config playbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../05-get-facts/get-facts.html">Run the Get Facts playbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../06-upgrade/upgrade.html">Run the Upgrade playbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../07-summary/summary.html">Summary</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ansible-lab</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Getting Started</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/01-getting-started/getting-started.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="getting-started">
+<h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
+<p>In your created GCP project, click the Cloud Shell button in the top right
+corner.  This will launch a shell session in a persistent container, giving you
+full shell access for your project.  It also comes with a number of useful
+tools pre-installed.  Using Cloud Shell for this lab ensures firewalls or VPNs
+won’t prevent access to the management interface of your lab firewall.</p>
+<div class="figure align-default">
+<img alt="../_images/cloud-shell.png" src="../_images/cloud-shell.png" />
+</div>
+<p>You can also click the <strong>Open in new window</strong> icon to make Cloud Shell take an
+entire browser tab.</p>
+<div class="figure align-default">
+<img alt="../_images/cloud-shell-tab.png" src="../_images/cloud-shell-tab.png" />
+</div>
+<p>Clone the repository containing our sample playbooks from GitHub, and change
+into the playbooks directory:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/PaloAltoNetworks/ansible-lab.git
+<span class="nb">cd</span> ansible-lab/playbooks
+</pre></div>
+</div>
+<div class="figure align-default">
+<img alt="../_images/git-clone.png" src="../_images/git-clone.png" />
+</div>
+<p>Ansible does not come installed by default in the Cloud Shell environment, so
+install it and add it to your shell’s PATH.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip3 install --user ansible
+<span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="nv">$HOME</span>/.local/bin:<span class="nv">$PATH</span>
+</pre></div>
+</div>
+<div class="figure align-default">
+<img alt="../_images/install-ansible.png" src="../_images/install-ansible.png" />
+</div>
+<p>Now, install the latest version of the PAN-OS Ansible collection from Ansible
+Galaxy, and the Python libraries it depends on.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ansible-galaxy collection install paloaltonetworks.panos
+pip3 install --user -r requirements.txt
+</pre></div>
+</div>
+<div class="figure align-default">
+<img alt="../_images/pip-install.png" src="../_images/pip-install.png" />
+</div>
+<p>Now, you’ll need to modify the IP address in <code class="docutils literal notranslate"><span class="pre">host_vars/lab-fw.yml</span></code> to match the
+management interface of the VM-Series that was launched for you in GCP.  In the
+GCP console, click on <strong>Menu &gt; Compute Engine &gt; VM instances</strong>.</p>
+<div class="figure align-default">
+<img alt="../_images/vm-instances.png" src="../_images/vm-instances.png" />
+</div>
+<p>The <strong>External IP</strong> of the launched instance is the management interface IP
+address.</p>
+<div class="figure align-default">
+<img alt="../_images/vm-external-ip.png" src="../_images/vm-external-ip.png" />
+</div>
+<p>In your Cloud Shell tab, click the pencil icon to launch the Cloud Shell
+Editor.  Navigate to the file <code class="docutils literal notranslate"><span class="pre">ansible-lab/playbooks/host_vars/lab-fw.yml</span></code>,
+and replace the ip_address value with the IP address of your VM-Series.</p>
+<div class="figure align-default">
+<img alt="../_images/lab-fw.png" src="../_images/lab-fw.png" />
+</div>
+<p>Log in to the firewall web UI using the following credentials.  It could take
+up to 10 minutes for the firewall to be fully booted.</p>
+<dl class="simple">
+<dt>Username:</dt><dd><p><code class="docutils literal notranslate"><span class="pre">admin</span></code></p>
+</dd>
+<dt>Password:</dt><dd><p><code class="docutils literal notranslate"><span class="pre">Ignite2020!</span></code></p>
+</dd>
+</dl>
+<div class="figure align-default">
+<img alt="../_images/web-ui.png" src="../_images/web-ui.png" />
+</div>
+<p>We’ll use the web UI to observe the changes we make to the firewall using
+Ansible.</p>
+<div class="figure align-default">
+<img alt="../_images/web-ui-auth.png" src="../_images/web-ui-auth.png" />
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../02-check-ready/check-ready.html" class="btn btn-neutral float-right" title="Run the Check Ready playbook" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../index.html" class="btn btn-neutral float-left" title="PAN-OS Ansible Lab Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Palo Alto Networks
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

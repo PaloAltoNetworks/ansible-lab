@@ -1,0 +1,245 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Summary &mdash; ansible-lab  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Run the Upgrade playbook" href="../06-upgrade/upgrade.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> ansible-lab
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../01-getting-started/getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../02-check-ready/check-ready.html">Run the Check Ready playbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../03-hello-world/hello-world.html">Run the Hello World playbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../04-full-config/full-config.html">Run the Full Config playbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../05-get-facts/get-facts.html">Run the Get Facts playbook</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../06-upgrade/upgrade.html">Run the Upgrade playbook</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Summary</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#what-we-ve-accomplished">What We’ve Accomplished</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#additional-resources">Additional Resources</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ansible-lab</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Summary</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/07-summary/summary.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="summary">
+<h1>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h1>
+<p>Congratulations!  You have completed the PAN-OS Ansible lab.</p>
+<div class="section" id="what-we-ve-accomplished">
+<h2>What We’ve Accomplished<a class="headerlink" href="#what-we-ve-accomplished" title="Permalink to this headline">¶</a></h2>
+<p>We’ve learned how to perform the following activities using the PAN-OS Ansible
+modules:</p>
+<dl>
+<dt>Configuration Changes:</dt><dd><p>The <a class="reference external" href="https://github.com/PaloAltoNetworks/ansible-lab/blob/master/playbooks/hello_world.yml">hello_world.yml</a>
+and <a class="reference external" href="https://github.com/PaloAltoNetworks/ansible-lab/blob/master/playbooks/full_config.yml">full_config.yml</a>
+playbooks showed how to modify the configuration of the PAN-OS device, as
+well as how to commit changes using the <code class="docutils literal notranslate"><span class="pre">panos_commit</span></code> module.</p>
+</dd>
+<dt>Operational Tasks:</dt><dd><p>The <a class="reference external" href="https://github.com/PaloAltoNetworks/ansible-lab/blob/master/playbooks/check_ready.yml">check_ready.yml</a>,
+the <a class="reference external" href="https://github.com/PaloAltoNetworks/ansible-lab/blob/master/playbooks/get_facts.yml">get_facts.yml</a>,
+and the <a class="reference external" href="https://github.com/PaloAltoNetworks/ansible-lab/blob/master/playbooks/upgrade.yml">upgrade.yml</a>
+playbooks are all examples of operational commands on a PAN-OS device.</p>
+<p>Operational commands are anything not configuration related.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="additional-resources">
+<h2>Additional Resources<a class="headerlink" href="#additional-resources" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/PaloAltoNetworks/pan-os-ansible">PAN-OS Ansible Collection</a></p></li>
+<li><p><a class="reference external" href="https://github.com/PaloAltoNetworks/ansible-playbooks">Example playbook repository</a></p></li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="../06-upgrade/upgrade.html" class="btn btn-neutral float-left" title="Run the Upgrade playbook" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Palo Alto Networks
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
