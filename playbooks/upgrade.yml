@@ -1,39 +1,5 @@
 ---
-# upgrade_single.yml - PAN-OS single firewall upgrade playbook.
-#
-# Description
-# ===========
-#
-# Upgrades a single PAN-OS device to the specified version.  Upgrade must be a single step (i.e. 8.1.7 to 8.1.12).
-# For major version upgrades requiring a base image to be downloaded to the device prior to performing the upgrade,
-# see the 'download_panos_image.yml' playbook.
-#
-# This playbook requires connection details for the deivce to be specified in the variables 'ip_address', 'username',
-# and 'password'.  These may be defined as host variables (see `host_vars/firewall.yml` for an example) or 
-# extra vars.
-#
-# Modules Used
-# ============
-#
-# panos_op - https://ansible-pan.readthedocs.io/en/latest/modules/panos_op_module.html
-#
-# Usage
-# =====
-#
-# Required variables:
-#
-#   target: Target PAN-OS device, as named in the inventory.  See `host_vars/lab_fw.yml` for sample 
-#           definition of host variables.
-#
-#   version: Version to install.
-#
-# See the VARS section of the playbook for additional customization options.
-#
-# Default run (maintenance release upgrade):
-#
-#  $ ansible-playbook -i inventory upgrade_single.yml --extra-vars "version=9.0.3-h3"
-
-- hosts: '{{ target | default("lab_fw") }}'
+- hosts: lab_fw
   connection: local
 
   vars:
