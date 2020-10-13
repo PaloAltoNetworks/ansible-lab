@@ -171,41 +171,7 @@ the <code class="docutils literal notranslate"><span class="pre">check_ready.yml
 <li><p><a class="reference external" href="https://paloaltonetworks.github.io/pan-os-ansible/modules/panos_op.html">panos_op</a></p></li>
 </ul>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">---</span>
-<span class="c1"># upgrade_single.yml - PAN-OS single firewall upgrade playbook.</span>
-<span class="c1">#</span>
-<span class="c1"># Description</span>
-<span class="c1"># ===========</span>
-<span class="c1">#</span>
-<span class="c1"># Upgrades a single PAN-OS device to the specified version.  Upgrade must be a single step (i.e. 8.1.7 to 8.1.12).</span>
-<span class="c1"># For major version upgrades requiring a base image to be downloaded to the device prior to performing the upgrade,</span>
-<span class="c1"># see the &#39;download_panos_image.yml&#39; playbook.</span>
-<span class="c1">#</span>
-<span class="c1"># This playbook requires connection details for the deivce to be specified in the variables &#39;ip_address&#39;, &#39;username&#39;,</span>
-<span class="c1"># and &#39;password&#39;.  These may be defined as host variables (see `host_vars/firewall.yml` for an example) or </span>
-<span class="c1"># extra vars.</span>
-<span class="c1">#</span>
-<span class="c1"># Modules Used</span>
-<span class="c1"># ============</span>
-<span class="c1">#</span>
-<span class="c1"># panos_op - https://ansible-pan.readthedocs.io/en/latest/modules/panos_op_module.html</span>
-<span class="c1">#</span>
-<span class="c1"># Usage</span>
-<span class="c1"># =====</span>
-<span class="c1">#</span>
-<span class="c1"># Required variables:</span>
-<span class="c1">#</span>
-<span class="c1">#   target: Target PAN-OS device, as named in the inventory.  See `host_vars/lab_fw.yml` for sample </span>
-<span class="c1">#           definition of host variables.</span>
-<span class="c1">#</span>
-<span class="c1">#   version: Version to install.</span>
-<span class="c1">#</span>
-<span class="c1"># See the VARS section of the playbook for additional customization options.</span>
-<span class="c1">#</span>
-<span class="c1"># Default run (maintenance release upgrade):</span>
-<span class="c1">#</span>
-<span class="c1">#  $ ansible-playbook -i inventory upgrade_single.yml --extra-vars &quot;version=9.0.3-h3&quot;</span>
-
-<span class="o">-</span> <span class="n">hosts</span><span class="p">:</span> <span class="s1">&#39;{{ target | default(&quot;lab_fw&quot;) }}&#39;</span>
+<span class="o">-</span> <span class="n">hosts</span><span class="p">:</span> <span class="n">lab_fw</span>
   <span class="n">connection</span><span class="p">:</span> <span class="n">local</span>
 
   <span class="nb">vars</span><span class="p">:</span>
