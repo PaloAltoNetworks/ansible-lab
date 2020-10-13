@@ -6,12 +6,6 @@
       "@semantic-release/commit-analyzer",
       "@semantic-release/release-notes-generator",
       [
-        "@semantic-release/exec",
-        {
-            "prepareCmd": ".github/set-version.sh ${nextRelease.version}"
-        }
-    ],
-      [
           "@semantic-release/git",
           {
               "assets": [
