@@ -163,28 +163,6 @@
 <p>The <code class="docutils literal notranslate"><span class="pre">check_ready.yml</span></code> playbook will loop until the firewall is fully booted
 and able to pass traffic:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">---</span>
-<span class="c1"># check_ready.yml - Checks to see if a firewall is ready via &#39;show chassis-ready&#39; command.</span>
-<span class="c1">#</span>
-<span class="c1"># Description</span>
-<span class="c1"># ===========</span>
-<span class="c1">#</span>
-<span class="c1"># Uses the &#39;show chassis-ready&#39; op command to see if a PAN-OS firewall is ready.  This playbook uses the Ansible</span>
-<span class="c1"># &#39;until&#39; and &#39;retries&#39; keywords to retry the command until successful.</span>
-<span class="c1">#</span>
-<span class="c1"># This playbook requires connection details for the device to be specified in the variables &#39;ip_address&#39;, &#39;username&#39;,</span>
-<span class="c1"># and &#39;password&#39;.  These may be defined as host variables (see `host_vars/firewall.yml` for an example) or </span>
-<span class="c1"># extra vars.</span>
-<span class="c1">#</span>
-<span class="c1"># Modules Used</span>
-<span class="c1"># ============</span>
-<span class="c1">#</span>
-<span class="c1"># panos_op - https://ansible-pan.readthedocs.io/en/latest/modules/panos_op_module.html</span>
-<span class="c1">#</span>
-<span class="c1"># Usage</span>
-<span class="c1"># =====</span>
-<span class="c1">#</span>
-<span class="c1">#   $ ansible-playbook -i inventory check_ready.yml</span>
-
 <span class="o">-</span> <span class="n">hosts</span><span class="p">:</span> <span class="n">lab_fw</span>
   <span class="n">connection</span><span class="p">:</span> <span class="n">local</span>
 
