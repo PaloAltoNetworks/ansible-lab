@@ -5,8 +5,6 @@ PAN-OS Ansible Lab Guide
 .. image:: panw-logo-bw.png
    :align: center
 
-Version: 1.0.0
-
 Welcome
 =======
 
