@@ -157,13 +157,40 @@
             
   <div class="section" id="run-the-get-facts-playbook">
 <h1>Run the Get Facts playbook<a class="headerlink" href="#run-the-get-facts-playbook" title="Permalink to this headline">¶</a></h1>
-<p>The <a class="reference external" href="https://github.com/PaloAltoNetworks/ansible-lab/blob/master/playbooks/get_facts.yml">get_facts.yml</a>
-playbook fetches the model type and software version from a PAN-OS device and
-prints it out to the screen.  To see the different types of information you can
-retrieve, see the <a class="reference external" href="https://paloaltonetworks.github.io/pan-os-ansible/modules/panos_facts.html">panos_facts module documentation</a>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">get_facts.yml</span></code> playbook fetches the model type and software version from
+a PAN-OS device and prints it out to the screen.  To see the different types of
+information you can retrieve, see the <a class="reference external" href="https://paloaltonetworks.github.io/pan-os-ansible/modules/panos_facts.html">panos_facts module documentation</a>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">---</span>
+<span class="o">-</span> <span class="n">hosts</span><span class="p">:</span> <span class="n">lab_fw</span>
+  <span class="n">connection</span><span class="p">:</span> <span class="n">local</span>
+
+  <span class="nb">vars</span><span class="p">:</span>
+    <span class="n">device</span><span class="p">:</span>
+      <span class="n">ip_address</span><span class="p">:</span> <span class="s1">&#39;{{ ip_address }}&#39;</span>
+      <span class="n">username</span><span class="p">:</span> <span class="s1">&#39;{{ username | default(omit) }}&#39;</span>
+      <span class="n">password</span><span class="p">:</span> <span class="s1">&#39;{{ password | default(omit) }}&#39;</span>
+      <span class="n">api_key</span><span class="p">:</span> <span class="s1">&#39;{{ api_key | default(omit) }}&#39;</span>
+
+  <span class="n">vars_files</span><span class="p">:</span>
+    <span class="o">-</span> <span class="n">creds</span><span class="o">.</span><span class="n">yml</span>
+
+  <span class="n">collections</span><span class="p">:</span>
+    <span class="o">-</span> <span class="n">paloaltonetworks</span><span class="o">.</span><span class="n">panos</span>
+
+  <span class="n">tasks</span><span class="p">:</span>
+    <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">Gather</span> <span class="n">facts</span> <span class="k">for</span> <span class="n">device</span>
+      <span class="n">panos_facts</span><span class="p">:</span>
+        <span class="n">provider</span><span class="p">:</span> <span class="s1">&#39;{{ device }}&#39;</span>
+
+    <span class="o">-</span> <span class="n">debug</span><span class="p">:</span>
+        <span class="n">msg</span><span class="p">:</span> <span class="s2">&quot;Model: {{ ansible_facts[&#39;net_model&#39;] }}, version: {{ ansible_facts[&#39;net_version&#39;] }}&quot;</span>
+</pre></div>
+</div>
+<p>Run the playbook with <code class="docutils literal notranslate"><span class="pre">ansible-playbook</span></code>:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ansible-playbook -i inventory get_facts.yml  --ask-vault-pass
 </pre></div>
 </div>
+<p>Output:</p>
 <div class="figure align-default">
 <img alt="../_images/get-facts.png" src="../_images/get-facts.png" />
 </div>

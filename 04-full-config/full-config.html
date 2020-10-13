@@ -157,10 +157,9 @@
             
   <div class="section" id="run-the-full-config-playbook">
 <h1>Run the Full Config playbook<a class="headerlink" href="#run-the-full-config-playbook" title="Permalink to this headline">¶</a></h1>
-<p>The <a class="reference external" href="https://github.com/PaloAltoNetworks/ansible-lab/blob/master/playbooks/full_config.yml">full_config.yml</a>
-playbook will create a full PAN-OS configuration using several different
-modules, then commits the configuration.  For more information, see the
-documentation pages for the modules used:</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">full_config.yml</span></code> playbook will create a full PAN-OS configuration using
+several different modules, then commits the configuration.  For more
+information, see the documentation pages for the modules used:</p>
 <ul class="simple">
 <li><p><a class="reference external" href="https://paloaltonetworks.github.io/pan-os-ansible/modules/panos_interface.html">panos_interface</a></p></li>
 <li><p><a class="reference external" href="https://paloaltonetworks.github.io/pan-os-ansible/modules/panos_zone.html">panos_zone</a></p></li>
@@ -170,9 +169,230 @@ documentation pages for the modules used:</p>
 <li><p><a class="reference external" href="https://paloaltonetworks.github.io/pan-os-ansible/modules/panos_nat_rule.html">panos_nat_rule</a></p></li>
 <li><p><a class="reference external" href="https://paloaltonetworks.github.io/pan-os-ansible/modules/panos_commit.html">panos_commit</a></p></li>
 </ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">---</span>
+<span class="o">-</span> <span class="n">hosts</span><span class="p">:</span> <span class="n">lab_fw</span>
+  <span class="n">connection</span><span class="p">:</span> <span class="n">local</span>
+
+  <span class="nb">vars</span><span class="p">:</span>
+    <span class="n">device</span><span class="p">:</span>
+      <span class="n">ip_address</span><span class="p">:</span> <span class="s1">&#39;{{ ip_address }}&#39;</span>
+      <span class="n">username</span><span class="p">:</span> <span class="s1">&#39;{{ username | default(omit) }}&#39;</span>
+      <span class="n">password</span><span class="p">:</span> <span class="s1">&#39;{{ password | default(omit) }}&#39;</span>
+      <span class="n">api_key</span><span class="p">:</span> <span class="s1">&#39;{{ api_key | default(omit) }}&#39;</span>
+
+    <span class="n">interfaces</span><span class="p">:</span>
+      <span class="o">-</span> <span class="n">if_name</span><span class="p">:</span> <span class="s1">&#39;ethernet1/1&#39;</span>
+        <span class="n">mode</span><span class="p">:</span> <span class="s1">&#39;layer3&#39;</span>
+        <span class="n">enable_dhcp</span><span class="p">:</span> <span class="n">true</span>
+        <span class="n">create_default_route</span><span class="p">:</span> <span class="n">true</span>
+      <span class="o">-</span> <span class="n">if_name</span><span class="p">:</span> <span class="s1">&#39;ethernet1/2&#39;</span>
+        <span class="n">mode</span><span class="p">:</span> <span class="s1">&#39;layer3&#39;</span>
+        <span class="n">enable_dhcp</span><span class="p">:</span> <span class="n">true</span>
+
+    <span class="n">zones</span><span class="p">:</span>
+      <span class="o">-</span> <span class="n">zone</span><span class="p">:</span> <span class="s1">&#39;untrust&#39;</span>
+        <span class="n">mode</span><span class="p">:</span> <span class="s1">&#39;layer3&#39;</span>
+        <span class="n">interfaces</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;ethernet1/1&#39;</span><span class="p">]</span>
+      <span class="o">-</span> <span class="n">zone</span><span class="p">:</span> <span class="s1">&#39;trust&#39;</span>
+        <span class="n">mode</span><span class="p">:</span> <span class="s1">&#39;layer3&#39;</span>
+        <span class="n">interfaces</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;ethernet1/2&#39;</span><span class="p">]</span>
+
+    <span class="n">address_objects</span><span class="p">:</span>
+      <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="s1">&#39;web-srv&#39;</span>
+        <span class="n">value</span><span class="p">:</span> <span class="s1">&#39;10.5.2.10&#39;</span>
+      <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="s1">&#39;db-srv&#39;</span>
+        <span class="n">value</span><span class="p">:</span> <span class="s1">&#39;10.5.2.11&#39;</span>
+
+    <span class="n">service_objects</span><span class="p">:</span>
+      <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="s1">&#39;service-tcp-221&#39;</span>
+        <span class="n">protocol</span><span class="p">:</span> <span class="s1">&#39;tcp&#39;</span>
+        <span class="n">destination_port</span><span class="p">:</span> <span class="s1">&#39;221&#39;</span>
+      <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="s1">&#39;service-tcp-222&#39;</span>
+        <span class="n">protocol</span><span class="p">:</span> <span class="s1">&#39;tcp&#39;</span>
+        <span class="n">destination_port</span><span class="p">:</span> <span class="s1">&#39;222&#39;</span>
+
+    <span class="n">security_rules</span><span class="p">:</span>
+      <span class="o">-</span> <span class="n">rule_name</span><span class="p">:</span> <span class="s1">&#39;Allow ping&#39;</span>
+        <span class="n">source_zone</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;any&#39;</span><span class="p">]</span>
+        <span class="n">source_ip</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;any&#39;</span><span class="p">]</span>
+        <span class="n">destination_zone</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;any&#39;</span><span class="p">]</span>
+        <span class="n">destination_ip</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;any&#39;</span><span class="p">]</span>
+        <span class="n">application</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;ping&#39;</span><span class="p">]</span>
+        <span class="n">service</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;application-default&#39;</span><span class="p">]</span>
+        <span class="n">action</span><span class="p">:</span> <span class="s1">&#39;allow&#39;</span>
+
+      <span class="o">-</span> <span class="n">rule_name</span><span class="p">:</span> <span class="s1">&#39;Allow SSH inbound&#39;</span>
+        <span class="n">source_zone</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;untrust&#39;</span><span class="p">]</span>
+        <span class="n">source_ip</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;any&#39;</span><span class="p">]</span>
+        <span class="n">destination_zone</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;trust&#39;</span><span class="p">]</span>
+        <span class="n">destination_ip</span><span class="p">:</span> <span class="s1">&#39;any&#39;</span>
+        <span class="n">application</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;ssh&#39;</span><span class="p">]</span>
+        <span class="n">service</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;service-tcp-221&#39;</span><span class="p">,</span> <span class="s1">&#39;service-tcp-222&#39;</span><span class="p">]</span>
+        <span class="n">action</span><span class="p">:</span> <span class="s1">&#39;allow&#39;</span>
+
+      <span class="o">-</span> <span class="n">rule_name</span><span class="p">:</span> <span class="s1">&#39;Add web inbound rule&#39;</span>
+        <span class="n">source_zone</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;untrust&#39;</span><span class="p">]</span>
+        <span class="n">source_ip</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;any&#39;</span><span class="p">]</span>
+        <span class="n">destination_zone</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;trust&#39;</span><span class="p">]</span>
+        <span class="n">destination_ip</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;any&#39;</span><span class="p">]</span>
+        <span class="n">application</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;web-browsing&#39;</span><span class="p">,</span> <span class="s1">&#39;ssl&#39;</span><span class="p">,</span> <span class="s1">&#39;blog-posting&#39;</span><span class="p">]</span>
+        <span class="n">service</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;application-default&#39;</span><span class="p">]</span>
+        <span class="n">action</span><span class="p">:</span> <span class="s1">&#39;allow&#39;</span>
+
+      <span class="o">-</span> <span class="n">rule_name</span><span class="p">:</span> <span class="s1">&#39;Allow all outbound&#39;</span>
+        <span class="n">source_zone</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;trust&#39;</span><span class="p">]</span>
+        <span class="n">source_ip</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;any&#39;</span><span class="p">]</span>
+        <span class="n">destination_zone</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;untrust&#39;</span><span class="p">]</span>
+        <span class="n">destination_ip</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;any&#39;</span><span class="p">]</span>
+        <span class="n">application</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;any&#39;</span><span class="p">]</span>
+        <span class="n">service</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;application-default&#39;</span><span class="p">]</span>
+        <span class="n">action</span><span class="p">:</span> <span class="s1">&#39;allow&#39;</span>
+
+    <span class="n">inbound_nat_rules</span><span class="p">:</span>
+      <span class="o">-</span> <span class="n">rule_name</span><span class="p">:</span> <span class="s1">&#39;Web SSH&#39;</span>
+        <span class="n">source_zone</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;untrust&#39;</span><span class="p">]</span>
+        <span class="n">source_ip</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;any&#39;</span><span class="p">]</span>
+        <span class="n">destination_zone</span><span class="p">:</span> <span class="s1">&#39;untrust&#39;</span>
+        <span class="n">destination_ip</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;10.5.1.4&#39;</span><span class="p">]</span>
+        <span class="n">service</span><span class="p">:</span> <span class="s1">&#39;service-tcp-221&#39;</span>
+        <span class="n">snat_type</span><span class="p">:</span> <span class="s1">&#39;dynamic-ip-and-port&#39;</span>
+        <span class="n">snat_interface</span><span class="p">:</span> <span class="s1">&#39;ethernet1/2&#39;</span>
+        <span class="n">dnat_address</span><span class="p">:</span> <span class="s1">&#39;web-srv&#39;</span>
+        <span class="n">dnat_port</span><span class="p">:</span> <span class="s1">&#39;22&#39;</span>
+
+      <span class="o">-</span> <span class="n">rule_name</span><span class="p">:</span> <span class="s1">&#39;DB SSH&#39;</span>
+        <span class="n">source_zone</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;untrust&#39;</span><span class="p">]</span>
+        <span class="n">source_ip</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;any&#39;</span><span class="p">]</span>
+        <span class="n">destination_zone</span><span class="p">:</span> <span class="s1">&#39;untrust&#39;</span>
+        <span class="n">destination_ip</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;10.5.1.4&#39;</span><span class="p">]</span>
+        <span class="n">service</span><span class="p">:</span> <span class="s1">&#39;service-tcp-222&#39;</span>
+        <span class="n">snat_type</span><span class="p">:</span> <span class="s1">&#39;dynamic-ip-and-port&#39;</span>
+        <span class="n">snat_interface</span><span class="p">:</span> <span class="s1">&#39;ethernet1/2&#39;</span>
+        <span class="n">dnat_address</span><span class="p">:</span> <span class="s1">&#39;db-srv&#39;</span>
+        <span class="n">dnat_port</span><span class="p">:</span> <span class="s1">&#39;22&#39;</span>
+
+      <span class="o">-</span> <span class="n">rule_name</span><span class="p">:</span> <span class="s1">&#39;WordPress NAT&#39;</span>
+        <span class="n">source_zone</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;untrust&#39;</span><span class="p">]</span>
+        <span class="n">source_ip</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;any&#39;</span><span class="p">]</span>
+        <span class="n">destination_zone</span><span class="p">:</span> <span class="s1">&#39;untrust&#39;</span>
+        <span class="n">destination_ip</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;10.5.1.4&#39;</span><span class="p">]</span>
+        <span class="n">service</span><span class="p">:</span> <span class="s1">&#39;service-http&#39;</span>
+        <span class="n">snat_type</span><span class="p">:</span> <span class="s1">&#39;dynamic-ip-and-port&#39;</span>
+        <span class="n">snat_interface</span><span class="p">:</span> <span class="s1">&#39;ethernet1/2&#39;</span>
+        <span class="n">dnat_address</span><span class="p">:</span> <span class="s1">&#39;web-srv&#39;</span>
+        <span class="n">dnat_port</span><span class="p">:</span> <span class="s1">&#39;80&#39;</span>
+
+  <span class="n">vars_files</span><span class="p">:</span>
+    <span class="o">-</span> <span class="n">creds</span><span class="o">.</span><span class="n">yml</span>
+
+  <span class="n">collections</span><span class="p">:</span>
+    <span class="o">-</span> <span class="n">paloaltonetworks</span><span class="o">.</span><span class="n">panos</span>
+
+  <span class="n">tasks</span><span class="p">:</span>
+    <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">Configure</span> <span class="n">interfaces</span>
+      <span class="n">panos_interface</span><span class="p">:</span>
+        <span class="n">provider</span><span class="p">:</span> <span class="s1">&#39;{{ device }}&#39;</span>
+        <span class="n">template</span><span class="p">:</span> <span class="s1">&#39;{{ template | default(omit) }}&#39;</span>
+        <span class="n">if_name</span><span class="p">:</span> <span class="s1">&#39;{{ item.if_name }}&#39;</span>
+        <span class="n">mode</span><span class="p">:</span> <span class="s1">&#39;{{ item.mode }}&#39;</span>
+        <span class="n">enable_dhcp</span><span class="p">:</span> <span class="s1">&#39;{{ item.enable_dhcp }}&#39;</span>
+        <span class="n">create_default_route</span><span class="p">:</span> <span class="s1">&#39;{{ item.create_default_route | default(omit) }}&#39;</span>
+        <span class="n">commit</span><span class="p">:</span> <span class="n">false</span>
+      <span class="n">with_items</span><span class="p">:</span> <span class="s1">&#39;{{ interfaces }}&#39;</span>
+      <span class="n">tags</span><span class="p">:</span> <span class="n">network</span>
+
+    <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">Configure</span> <span class="n">zones</span>
+      <span class="n">panos_zone</span><span class="p">:</span>
+        <span class="n">provider</span><span class="p">:</span> <span class="s1">&#39;{{ device }}&#39;</span>
+        <span class="n">template</span><span class="p">:</span> <span class="s1">&#39;{{ template | default(omit) }}&#39;</span>
+        <span class="n">zone</span><span class="p">:</span> <span class="s1">&#39;{{ item.zone }}&#39;</span>
+        <span class="n">mode</span><span class="p">:</span> <span class="s1">&#39;{{ item.mode }}&#39;</span>
+        <span class="n">interface</span><span class="p">:</span> <span class="s1">&#39;{{ item.interfaces }}&#39;</span>
+      <span class="n">with_items</span><span class="p">:</span> <span class="s1">&#39;{{ zones }}&#39;</span>
+      <span class="n">tags</span><span class="p">:</span> <span class="n">network</span>
+
+    <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">Create</span> <span class="n">address</span> <span class="n">objects</span>
+      <span class="n">panos_address_object</span><span class="p">:</span>
+        <span class="n">provider</span><span class="p">:</span> <span class="s1">&#39;{{ device }}&#39;</span>
+        <span class="n">device_group</span><span class="p">:</span> <span class="s1">&#39;{{ device_group | default(omit) }}&#39;</span>
+        <span class="n">name</span><span class="p">:</span> <span class="s1">&#39;{{ item.name }}&#39;</span>
+        <span class="n">value</span><span class="p">:</span> <span class="s1">&#39;{{ item.value }}&#39;</span>
+        <span class="n">commit</span><span class="p">:</span> <span class="n">false</span>
+      <span class="n">with_items</span><span class="p">:</span> <span class="s1">&#39;{{ address_objects }}&#39;</span>
+      <span class="n">tags</span><span class="p">:</span> <span class="n">objects</span>
+
+    <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">Create</span> <span class="n">service</span> <span class="n">objects</span>
+      <span class="n">panos_service_object</span><span class="p">:</span>
+        <span class="n">provider</span><span class="p">:</span> <span class="s1">&#39;{{ device }}&#39;</span>
+        <span class="n">device_group</span><span class="p">:</span> <span class="s1">&#39;{{ device_group|default(omit) }}&#39;</span>
+        <span class="n">name</span><span class="p">:</span> <span class="s1">&#39;{{ item.name }}&#39;</span>
+        <span class="n">protocol</span><span class="p">:</span> <span class="s1">&#39;{{ item.protocol }}&#39;</span>
+        <span class="n">destination_port</span><span class="p">:</span> <span class="s1">&#39;{{ item.destination_port }}&#39;</span>
+        <span class="n">commit</span><span class="p">:</span> <span class="n">false</span>
+      <span class="n">with_items</span><span class="p">:</span> <span class="s1">&#39;{{ service_objects }}&#39;</span>
+      <span class="n">tags</span><span class="p">:</span> <span class="n">objects</span>
+
+    <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">Create</span> <span class="n">security</span> <span class="n">rules</span>
+      <span class="n">panos_security_rule</span><span class="p">:</span>
+        <span class="n">provider</span><span class="p">:</span> <span class="s1">&#39;{{ device }}&#39;</span>
+        <span class="n">device_group</span><span class="p">:</span> <span class="s1">&#39;{{ device_group | default(omit) }}&#39;</span>
+        <span class="n">rule_name</span><span class="p">:</span> <span class="s1">&#39;{{ item.rule_name }}&#39;</span>
+        <span class="n">source_zone</span><span class="p">:</span> <span class="s1">&#39;{{ item.source_zone }}&#39;</span>
+        <span class="n">source_ip</span><span class="p">:</span> <span class="s1">&#39;{{ item.source_ip }}&#39;</span>
+        <span class="n">destination_zone</span><span class="p">:</span> <span class="s1">&#39;{{ item.destination_zone }}&#39;</span>
+        <span class="n">destination_ip</span><span class="p">:</span> <span class="s1">&#39;{{ item.destination_ip }}&#39;</span>
+        <span class="n">application</span><span class="p">:</span> <span class="s1">&#39;{{ item.application }}&#39;</span>
+        <span class="n">service</span><span class="p">:</span> <span class="s1">&#39;{{ item.service }}&#39;</span>
+        <span class="n">action</span><span class="p">:</span> <span class="s1">&#39;{{ item.action }}&#39;</span>
+        <span class="n">commit</span><span class="p">:</span> <span class="n">false</span>
+      <span class="n">with_items</span><span class="p">:</span> <span class="s1">&#39;{{ security_rules }}&#39;</span>
+      <span class="n">tags</span><span class="p">:</span> <span class="n">security_rules</span>
+
+    <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">Create</span> <span class="n">inbound</span> <span class="n">NAT</span> <span class="n">rules</span>
+      <span class="n">panos_nat_rule</span><span class="p">:</span>
+        <span class="n">provider</span><span class="p">:</span> <span class="s1">&#39;{{ device }}&#39;</span>
+        <span class="n">device_group</span><span class="p">:</span> <span class="s1">&#39;{{ device_group | default(omit) }}&#39;</span>
+        <span class="n">rule_name</span><span class="p">:</span> <span class="s1">&#39;{{ item.rule_name }}&#39;</span>
+        <span class="n">source_zone</span><span class="p">:</span> <span class="s1">&#39;{{ item.source_zone }}&#39;</span>
+        <span class="n">source_ip</span><span class="p">:</span> <span class="s1">&#39;{{ item.source_ip }}&#39;</span>
+        <span class="n">destination_zone</span><span class="p">:</span> <span class="s1">&#39;{{ item.destination_zone }}&#39;</span>
+        <span class="n">destination_ip</span><span class="p">:</span> <span class="s1">&#39;{{ item.destination_ip }}&#39;</span>
+        <span class="n">service</span><span class="p">:</span> <span class="s1">&#39;{{ item.service }}&#39;</span>
+        <span class="n">snat_type</span><span class="p">:</span> <span class="s1">&#39;{{ item.snat_type }}&#39;</span>
+        <span class="n">snat_interface</span><span class="p">:</span> <span class="s1">&#39;{{ item.snat_interface }}&#39;</span>
+        <span class="n">dnat_address</span><span class="p">:</span> <span class="s1">&#39;{{ item.dnat_address }}&#39;</span>
+        <span class="n">dnat_port</span><span class="p">:</span> <span class="s1">&#39;{{ item.dnat_port }}&#39;</span>
+        <span class="n">commit</span><span class="p">:</span> <span class="n">false</span>
+      <span class="n">with_items</span><span class="p">:</span> <span class="s1">&#39;{{ inbound_nat_rules }}&#39;</span>
+      <span class="n">tags</span><span class="p">:</span> <span class="n">nat_rules</span>
+
+    <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">Create</span> <span class="n">outbound</span> <span class="n">NAT</span> <span class="n">rule</span>
+      <span class="n">panos_nat_rule</span><span class="p">:</span>
+        <span class="n">provider</span><span class="p">:</span> <span class="s1">&#39;{{ device }}&#39;</span>
+        <span class="n">device_group</span><span class="p">:</span> <span class="s1">&#39;{{ device_group | default(omit) }}&#39;</span>
+        <span class="n">rule_name</span><span class="p">:</span> <span class="s1">&#39;Outbound NAT&#39;</span>
+        <span class="n">source_zone</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;trust&#39;</span><span class="p">]</span>
+        <span class="n">source_ip</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;any&#39;</span><span class="p">]</span>
+        <span class="n">destination_zone</span><span class="p">:</span> <span class="s1">&#39;untrust&#39;</span>
+        <span class="n">destination_ip</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;any&#39;</span><span class="p">]</span>
+        <span class="n">snat_type</span><span class="p">:</span> <span class="s1">&#39;dynamic-ip-and-port&#39;</span>
+        <span class="n">snat_interface</span><span class="p">:</span> <span class="s1">&#39;ethernet1/1&#39;</span>
+        <span class="n">commit</span><span class="p">:</span> <span class="n">false</span>
+      <span class="n">tags</span><span class="p">:</span> <span class="n">nat_rules</span>
+
+    <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">Commit</span> <span class="n">the</span> <span class="n">candidate</span> <span class="n">configuration</span>
+      <span class="n">panos_commit</span><span class="p">:</span>
+        <span class="n">provider</span><span class="p">:</span> <span class="s1">&#39;{{ device }}&#39;</span>
+        <span class="n">device_group</span><span class="p">:</span> <span class="s1">&#39;{{ device_group | default(omit) }}&#39;</span>
+        <span class="n">include_template</span><span class="p">:</span> <span class="s1">&#39;{{ template | default(omit) }}&#39;</span>
+      <span class="n">tags</span><span class="p">:</span> <span class="n">commit</span>
+</pre></div>
+</div>
+<p>Run the playbook with <code class="docutils literal notranslate"><span class="pre">ansible-playbook</span></code>:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ansible-playbook -i inventory full_config.yml --ask-vault-pass
 </pre></div>
 </div>
+<p>Output:</p>
 <div class="figure align-default">
 <img alt="../_images/full-config-1.png" src="../_images/full-config-1.png" />
 </div>

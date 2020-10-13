@@ -157,15 +157,43 @@
             
   <div class="section" id="run-the-hello-world-playbook">
 <h1>Run the Hello World playbook<a class="headerlink" href="#run-the-hello-world-playbook" title="Permalink to this headline">¶</a></h1>
-<p>The <a class="reference external" href="https://github.com/PaloAltoNetworks/ansible-lab/blob/master/playbooks/hello_world.yml">hello_world.yml</a>
-playbook will create the following address object:</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">hello_world.yml</span></code> playbook will create an address object:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">---</span>
+<span class="o">-</span> <span class="n">hosts</span><span class="p">:</span> <span class="n">lab_fw</span>
+  <span class="n">connection</span><span class="p">:</span> <span class="n">local</span>
+
+  <span class="nb">vars</span><span class="p">:</span>
+    <span class="n">device</span><span class="p">:</span>
+      <span class="n">ip_address</span><span class="p">:</span> <span class="s1">&#39;{{ ip_address }}&#39;</span>
+      <span class="n">username</span><span class="p">:</span> <span class="s1">&#39;{{ username | default(omit) }}&#39;</span>
+      <span class="n">password</span><span class="p">:</span> <span class="s1">&#39;{{ password | default(omit) }}&#39;</span>
+      <span class="n">api_key</span><span class="p">:</span> <span class="s1">&#39;{{ api_key | default(omit) }}&#39;</span>
+
+  <span class="n">vars_files</span><span class="p">:</span>
+    <span class="o">-</span> <span class="n">creds</span><span class="o">.</span><span class="n">yml</span>
+
+  <span class="n">collections</span><span class="p">:</span>
+    <span class="o">-</span> <span class="n">paloaltonetworks</span><span class="o">.</span><span class="n">panos</span>
+
+  <span class="n">tasks</span><span class="p">:</span>
+    <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">Create</span> <span class="n">my</span> <span class="n">first</span> <span class="n">address</span> <span class="nb">object</span>
+      <span class="n">panos_address_object</span><span class="p">:</span>
+        <span class="n">provider</span><span class="p">:</span> <span class="s1">&#39;{{ device }}&#39;</span>
+        <span class="n">name</span><span class="p">:</span> <span class="s1">&#39;Hello-World&#39;</span>
+        <span class="n">value</span><span class="p">:</span> <span class="s1">&#39;1.1.1.1&#39;</span>
+        <span class="n">description</span><span class="p">:</span> <span class="s1">&#39;My very first address object&#39;</span>
+        <span class="n">commit</span><span class="p">:</span> <span class="n">true</span>
+</pre></div>
+</div>
 <div class="figure align-default">
 <img alt="../_images/hello-world-object.png" src="../_images/hello-world-object.png" />
 </div>
 <p>For more information, see the <a class="reference external" href="https://ansible-pan.readthedocs.io/en/latest/modules/panos_address_object_module.html">panos_address_object module documentation</a>.</p>
+<p>Run the playbook with <code class="docutils literal notranslate"><span class="pre">ansible-playbook</span></code>:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ansible-playbook -i inventory hello_world.yml --ask-vault-pass
 </pre></div>
 </div>
+<p>Output:</p>
 <div class="figure align-default">
 <img alt="../_images/hello-world.png" src="../_images/hello-world.png" />
 </div>

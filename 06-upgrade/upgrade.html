@@ -157,9 +157,8 @@
             
   <div class="section" id="run-the-upgrade-playbook">
 <h1>Run the Upgrade playbook<a class="headerlink" href="#run-the-upgrade-playbook" title="Permalink to this headline">¶</a></h1>
-<p>The <a class="reference external" href="https://github.com/PaloAltoNetworks/ansible-lab/blob/master/playbooks/upgrade.yml">upgrade.yml</a>
-playbook automates a number of actions related to upgrading the software on a
-PAN-OS device.  It will:</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">upgrade.yml</span></code> playbook automates a number of actions related to upgrading
+the software on a PAN-OS device.  It will:</p>
 <ul class="simple">
 <li><p>Back up the configuration of a PAN-OS device locally.</p></li>
 <li><p>Download and install a new version of PAN-OS, then reboot the system.</p></li>
@@ -171,12 +170,101 @@ the <code class="docutils literal notranslate"><span class="pre">check_ready.yml
 <li><p><a class="reference external" href="https://paloaltonetworks.github.io/pan-os-ansible/modules/panos_software.html">panos_software</a></p></li>
 <li><p><a class="reference external" href="https://paloaltonetworks.github.io/pan-os-ansible/modules/panos_op.html">panos_op</a></p></li>
 </ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">---</span>
+<span class="c1"># upgrade_single.yml - PAN-OS single firewall upgrade playbook.</span>
+<span class="c1">#</span>
+<span class="c1"># Description</span>
+<span class="c1"># ===========</span>
+<span class="c1">#</span>
+<span class="c1"># Upgrades a single PAN-OS device to the specified version.  Upgrade must be a single step (i.e. 8.1.7 to 8.1.12).</span>
+<span class="c1"># For major version upgrades requiring a base image to be downloaded to the device prior to performing the upgrade,</span>
+<span class="c1"># see the &#39;download_panos_image.yml&#39; playbook.</span>
+<span class="c1">#</span>
+<span class="c1"># This playbook requires connection details for the deivce to be specified in the variables &#39;ip_address&#39;, &#39;username&#39;,</span>
+<span class="c1"># and &#39;password&#39;.  These may be defined as host variables (see `host_vars/firewall.yml` for an example) or </span>
+<span class="c1"># extra vars.</span>
+<span class="c1">#</span>
+<span class="c1"># Modules Used</span>
+<span class="c1"># ============</span>
+<span class="c1">#</span>
+<span class="c1"># panos_op - https://ansible-pan.readthedocs.io/en/latest/modules/panos_op_module.html</span>
+<span class="c1">#</span>
+<span class="c1"># Usage</span>
+<span class="c1"># =====</span>
+<span class="c1">#</span>
+<span class="c1"># Required variables:</span>
+<span class="c1">#</span>
+<span class="c1">#   target: Target PAN-OS device, as named in the inventory.  See `host_vars/lab_fw.yml` for sample </span>
+<span class="c1">#           definition of host variables.</span>
+<span class="c1">#</span>
+<span class="c1">#   version: Version to install.</span>
+<span class="c1">#</span>
+<span class="c1"># See the VARS section of the playbook for additional customization options.</span>
+<span class="c1">#</span>
+<span class="c1"># Default run (maintenance release upgrade):</span>
+<span class="c1">#</span>
+<span class="c1">#  $ ansible-playbook -i inventory upgrade_single.yml --extra-vars &quot;version=9.0.3-h3&quot;</span>
+
+<span class="o">-</span> <span class="n">hosts</span><span class="p">:</span> <span class="s1">&#39;{{ target | default(&quot;lab_fw&quot;) }}&#39;</span>
+  <span class="n">connection</span><span class="p">:</span> <span class="n">local</span>
+
+  <span class="nb">vars</span><span class="p">:</span>
+    <span class="n">device</span><span class="p">:</span>
+      <span class="n">ip_address</span><span class="p">:</span> <span class="s1">&#39;{{ ip_address }}&#39;</span>
+      <span class="n">username</span><span class="p">:</span> <span class="s1">&#39;{{ username | default(omit) }}&#39;</span>
+      <span class="n">password</span><span class="p">:</span> <span class="s1">&#39;{{ password | default(omit) }}&#39;</span>
+      <span class="n">api_key</span><span class="p">:</span> <span class="s1">&#39;{{ api_key | default(omit) }}&#39;</span>
+
+    <span class="c1"># backup_config - Create a backup of the currently running config.</span>
+    <span class="n">backup_config</span><span class="p">:</span> <span class="n">true</span>
+
+    <span class="c1"># backup_filename - Filename for running config backup.</span>
+    <span class="n">backup_filename</span><span class="p">:</span> <span class="s1">&#39;ansible-backup-{{ ansible_date_time.date }}.xml&#39;</span>
+
+    <span class="c1"># version - Version of PAN-OS to install.</span>
+    <span class="n">version</span><span class="p">:</span> <span class="s1">&#39;9.0.8&#39;</span>
+
+  <span class="n">vars_files</span><span class="p">:</span>
+    <span class="o">-</span> <span class="n">creds</span><span class="o">.</span><span class="n">yml</span>
+
+  <span class="n">tasks</span><span class="p">:</span>
+    <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">Backup</span> <span class="n">device</span> <span class="n">config</span>
+      <span class="n">paloaltonetworks</span><span class="o">.</span><span class="n">panos</span><span class="o">.</span><span class="n">panos_op</span><span class="p">:</span>
+        <span class="n">provider</span><span class="p">:</span> <span class="s1">&#39;{{ device }}&#39;</span>
+        <span class="n">cmd</span><span class="p">:</span> <span class="s1">&#39;save config to {{ backup_filename }}&#39;</span>
+      <span class="n">when</span><span class="p">:</span> <span class="n">backup_config</span><span class="o">|</span><span class="nb">bool</span>
+
+    <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">Install</span> <span class="n">target</span> <span class="n">PAN</span><span class="o">-</span><span class="n">OS</span> <span class="n">version</span>
+      <span class="n">paloaltonetworks</span><span class="o">.</span><span class="n">panos</span><span class="o">.</span><span class="n">panos_software</span><span class="p">:</span>
+        <span class="n">provider</span><span class="p">:</span> <span class="s1">&#39;{{ device }}&#39;</span>
+        <span class="n">version</span><span class="p">:</span> <span class="s1">&#39;{{ version }}&#39;</span>
+        <span class="n">restart</span><span class="p">:</span> <span class="n">true</span>
+
+    <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">Pause</span> <span class="k">for</span> <span class="n">restart</span>
+      <span class="n">pause</span><span class="p">:</span>
+        <span class="n">seconds</span><span class="p">:</span> <span class="mi">30</span>
+
+    <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">Check</span> <span class="n">to</span> <span class="n">see</span> <span class="k">if</span> <span class="n">device</span> <span class="ow">is</span> <span class="n">ready</span>
+      <span class="n">paloaltonetworks</span><span class="o">.</span><span class="n">panos</span><span class="o">.</span><span class="n">panos_op</span><span class="p">:</span>
+        <span class="n">provider</span><span class="p">:</span> <span class="s1">&#39;{{ device }}&#39;</span>
+        <span class="n">cmd</span><span class="p">:</span> <span class="s1">&#39;show chassis-ready&#39;</span>
+      <span class="n">changed_when</span><span class="p">:</span> <span class="n">false</span>
+      <span class="n">register</span><span class="p">:</span> <span class="n">result</span>
+      <span class="n">until</span><span class="p">:</span> <span class="n">result</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">failed</span> <span class="ow">and</span> <span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">stdout</span> <span class="o">|</span> <span class="n">from_json</span><span class="p">)</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">result</span> <span class="o">==</span> <span class="s1">&#39;yes&#39;</span>
+      <span class="n">retries</span><span class="p">:</span> <span class="mi">30</span>
+      <span class="n">delay</span><span class="p">:</span> <span class="mi">60</span>
+</pre></div>
+</div>
+<p>Run the playbook with <code class="docutils literal notranslate"><span class="pre">ansible-playbook</span></code>:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ansible-playbook -i inventory upgrade.yml --ask-vault-pass
 </pre></div>
 </div>
+<p>Output:</p>
 <div class="figure align-default">
 <img alt="../_images/upgrade.png" src="../_images/upgrade.png" />
 </div>
+<p>After the playbook has completed, the web UI of the firewall will show it has
+been upgraded to the specified version.</p>
 <div class="figure align-default">
 <img alt="../_images/upgrade-complete.png" src="../_images/upgrade-complete.png" />
 </div>
