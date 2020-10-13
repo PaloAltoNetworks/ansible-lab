@@ -1,0 +1,83 @@
+---
+name: CI/CD
+on:
+  push:
+    branches:
+      - master
+      - develop
+  pull_request:
+  schedule:
+    - cron: "0 0 1 * *"
+
+jobs:
+  validate:
+    name: validate
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v2
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v1
+
+      - name: Validate infrastructure directory
+        run: |
+          cd ${GITHUB_WORKSPACE}/infrastructure
+          touch sa.key
+          terraform init
+          terraform validate
+          terraform fmt -check -recursive
+
+  release:
+    name: release
+    if: github.event_name == 'push' && github.ref != 'refs/heads/develop'
+    needs: [validate]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Create release and publish
+        id: release
+        uses: cycjimmy/semantic-release-action@v2
+        with:
+          semantic_version: 17.1.1
+          extra_plugins: |
+            conventional-changelog-conventionalcommits@^4.4.0
+            @semantic-release/git@^9.0.0
+            @semantic-release/exec@^5.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  docs:
+    name: docs
+    if: github.event_name == 'push' && github.ref != 'refs/heads/develop'
+    needs: [release]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2.1.3
+        with:
+          python-version: 3.8
+
+      - name: Install documentation requirements
+        run: |
+          pip install -r docs/requirements.txt
+      - name: Generate documentation
+        run: |
+          cd docs
+          make html
+          touch _build/html/.nojekyll
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@3.6.2
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: gh-pages # The branch the action should deploy to.
+          FOLDER: docs/_build/html # The folder the action should deploy.
+          CLEAN: true # Automatically remove deleted files from the deploy branch
