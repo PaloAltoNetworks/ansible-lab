@@ -2,9 +2,12 @@
 Run the Check Ready playbook
 ============================
 
-Run the `check_ready.yml <https://github.com/PaloAltoNetworks/ansible-lab/blob/master/playbooks/check_ready.yml>`_
-playbook, which will loop until the firewall is fully booted and able to pass
-traffic:
+The ``check_ready.yml`` playbook will loop until the firewall is fully booted
+and able to pass traffic:
+
+.. literalinclude:: ../../playbooks/check_ready.yml
+
+Run the playbook with ``ansible-playbook``:
 
 .. code-block:: bash
 
@@ -21,6 +24,8 @@ playbook run:
 
 ansible-vault will then decrypt the credentials stored in ``creds.yml`` and
 supply them to the playbook run.
+
+Output:
 
 .. figure:: check-ready.png
 
