@@ -22,4 +22,8 @@
         name: 'Hello-World'
         value: '1.1.1.1'
         description: 'My very first address object'
-        commit: true
+
+    - name: Commit the candidate configuration
+      panos_commit:
+        provider: '{{ device }}'
+      tags: commit
