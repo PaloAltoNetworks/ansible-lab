@@ -39,7 +39,7 @@ the ``ANSIBLE_VAULT_PASSWORD_FILE`` environment variable:
 
 .. code-block:: bash
 
-   echo ‘P4loalto!’ > $HOME/.vault_pass.txt
+   echo 'P4loalto!' > $HOME/.vault_pass.txt
    export ANSIBLE_VAULT_PASSWORD_FILE=~/.vault_pass.txt
 
 .. figure:: vault-pass.png

@@ -27,7 +27,9 @@ Output:
 
 .. figure:: upgrade.png
 
-After the playbook has completed, the web UI of the firewall will show it has
-been upgraded to the specified version.
+The download and installation of PAN-OS software can be observed using the
+Tasks button in the bottom right corner of the firewall web UI. After the playbook has
+completed, login again to the web UI of the firewall and it will show the upgrade to the
+specified version was performed.
 
 .. figure:: upgrade-complete.png

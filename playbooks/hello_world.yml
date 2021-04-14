@@ -26,4 +26,3 @@
     - name: Commit the candidate configuration
       panos_commit_firewall:
         provider: '{{ device }}'
-      tags: commit
