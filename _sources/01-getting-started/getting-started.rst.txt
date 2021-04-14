@@ -30,6 +30,7 @@ install it and add it to your shell's PATH.
 
 .. code-block:: bash
 
+   pip3 install --upgrade pip
    pip3 install --user ansible
    export PATH=$HOME/.local/bin:$PATH
 
@@ -56,9 +57,10 @@ address.
 
 .. figure:: vm-external-ip.png
 
-In your Cloud Shell tab, click the pencil icon to launch the Cloud Shell
-Editor.  Navigate to the file ``ansible-lab/playbooks/host_vars/lab-fw.yml``,
+In your Cloud Shell tab, click the pencil icon to launch the Cloud Shell Editor.
+Click **File** and **Open...** then navigate to the file ``ansible-lab/playbooks/host_vars/lab-fw.yml``,
 and replace the ip_address value with the IP address of your VM-Series.
+Your changes to the file will be saved automatically by default.
 
 .. figure:: lab-fw.png
 
